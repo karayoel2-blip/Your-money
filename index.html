@@ -32,7 +32,7 @@
         .brand-header h1 {
             margin: 0;
             font-size: 28px;
-            color: #fe1913; /* Rouge exact du logo */
+            color: #fe1913;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: -0.5px;
@@ -204,7 +204,7 @@
         </div>
 
         <a id="btnContactWhatsApp" href="#" target="_blank" class="btn-whatsapp">
-            💬 Contactez-moi sur WhatsApp
+            💬 Contactez-nous sur WhatsApp
         </a>
 
         <div class="qr-container">
@@ -251,10 +251,9 @@
         
         const whatsappUrl = `https://wa.me/${NUMERO_WHATSAPP}?text=${messageEncode}`;
 
-        // Mise à jour du lien du bouton
         document.getElementById('btnContactWhatsApp').href = whatsappUrl;
 
-        // Génération automatique du QR Code via une API gratuite et dynamique
+
         document.getElementById('qrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(whatsappUrl)}`;
 
         document.getElementById('recuClient').style.display = 'block';
