@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Money - Simulateur Client</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        .calculator-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+        }
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .brand-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #fe1913; /* Rouge exact du logo */
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+        .brand-header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .form-group { 
+            margin-bottom: 20px; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            font-size: 14px; 
+        }
+        .input-container {
+            position: relative;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+        input:focus { 
+            border-color: #fe1913; 
+            outline: none; 
+        }
+        .currency-suffix {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        
+        button {
+            background-color: #fe1913;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(254, 25, 19, 0.2);
+            transition: background 0.2s ease;
+        }
+        button:hover { 
+            background-color: #d6110c; 
+        }
+        
+        .recu-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 5px solid #27ae60;
+            padding: 18px;
+            margin-top: 25px;
+            border-radius: 8px;
+        }
+        .recu-title {
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+        .recu-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .recu-total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px dashed #cbd5e0;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .total-amount {
+            font-size: 24px;
+            color: #2980b9;
+            font-weight: 800;
+        }
+
+        .btn-whatsapp {
+            display: block;
+            text-align: center;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+            transition: background 0.3s ease;
+        }
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+        }
+
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .qr-container p {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .qr-code {
+            max-width: 130px;
+            height: auto;
+            border: 4px solid white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator-card">
+    <div class="brand-header">
+        <h1>Your Money</h1>
+        <p>Simulateur de tarif Gabon ➔ Maroc</p>
+    </div>
+
+    <div class="form-group">
+        <label for="sommeClient">Montant envoyé (FCFA) :</label>
+        <div class="input-container">
+            <input type="number" id="sommeClient" placeholder="Ex: 150000" min="5000">
+            <span class="currency-suffix">FCFA</span>
+        </div>
+    </div>
+    <button onclick="simulerTransfert()">Simuler le transfert</button>
+
+    <div id="recuClient" class="recu-box" style="display: none;">
+        <div class="recu-title">📋 Détail de l'opération</div>
+        
+        <div class="recu-line">
+            <span>Montant Initial :</span>
+            <strong><span id="resInitial"></span> FCFA</strong>
+        </div>
+        <div class="recu-line">
+            <span>Frais de Transfert :</span>
+            <strong style="color: #e67e22;"><span id="resFraisPourcent"></span>% (-<span id="resFraisFCFA"></span> FCFA)</strong>
+        </div>
+        <div class="recu-line">
+            <span>Montant Net :</span>
+            <strong><span id="resNet"></span> FCFA</strong>
+        </div>
+        
+        <div class="recu-total">
+            <span style="font-size: 12px; color: #7f8c8d; text-transform: uppercase; font-weight: bold; display: block; margin-bottom: 3px;">Somme à recevoir au Maroc</span>
+            <span class="total-amount"><span id="resMad"></span> MAD</span>
+        </div>
+
+        <a id="btnContactWhatsApp" href="#" target="_blank" class="btn-whatsapp">
+            💬 Contactez-moi sur WhatsApp
+        </a>
+
+        <div class="qr-container">
+            <p>Ou scannez ce code QR pour lancer la discussion :</p>
+            <img id="qrCodeImg" class="qr-code" src="" alt="Code QR WhatsApp">
+        </div>
+    </div>
+</div>
+
+<script>
+    const TAUX_CLIENT_FIXE = 0.015;
+    
+    // Numéro de téléphone extrait de la capture d'écran (+241 76 24 35 56)
+    const NUMERO_WHATSAPP = "24176243556"; 
+
+    function simulerTransfert() {
+        const inputSomme = document.getElementById('sommeClient').value;
+        const montantFCFA = parseFloat(inputSomme);
+
+        if (isNaN(montantFCFA) || montantFCFA < 5000) {
+            alert("Veuillez entrer un montant valide (Minimum 5 000 FCFA).");
+            return;
+        }
+
+        let pourcentageFrais = 0;
+        if (montantFCFA >= 5000 && montantFCFA <= 99999) pourcentageFrais = 0.03;
+        else if (montantFCFA >= 100000 && montantFCFA <= 300000) pourcentageFrais = 0.02;
+        else if (montantFCFA >= 300001 && montantFCFA <= 500000) pourcentageFrais = 0.01;
+
+        const montantFraisFCFA = montantFCFA * pourcentageFrais;
+        const montantNetFCFA = montantFCFA - montantFraisFCFA;
+        const montantDirhamsClient = Math.ceil(montantNetFCFA * TAUX_CLIENT_FIXE);
+
+        document.getElementById('resInitial').innerText = montantFCFA.toLocaleString();
+        document.getElementById('resFraisPourcent').innerText = pourcentageFrais * 100;
+        document.getElementById('resFraisFCFA').innerText = montantFraisFCFA.toLocaleString();
+        document.getElementById('resNet').innerText = montantNetFCFA.toLocaleString();
+        
+        const madFormate = montantDirhamsClient.toLocaleString('fr-FR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        document.getElementById('resMad').innerText = madFormate;
+
+        const message = `Bonjour Your Money, je souhaite envoyer ${montantFCFA.toLocaleString()} FCFA pour recevoir ${madFormate} MAD au Maroc.`;
+        const messageEncode = encodeURIComponent(message);
+        
+        const whatsappUrl = `https://wa.me/${NUMERO_WHATSAPP}?text=${messageEncode}`;
+
+        // Mise à jour du lien du bouton
+        document.getElementById('btnContactWhatsApp').href = whatsappUrl;
+
+        // Génération automatique du QR Code via une API gratuite et dynamique
+        document.getElementById('qrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(whatsappUrl)}`;
+
+        document.getElementById('recuClient').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
+
+
